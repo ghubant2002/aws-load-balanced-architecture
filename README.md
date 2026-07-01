@@ -21,32 +21,7 @@ The objective of this architecture is to deploy a highly available, fault-tolera
 
 ## Architecture Flow
 
-```mermaid
-flowchart LR
-    Client([End User]) -- "HTTPS Request" --> DNS[Amazon Route 53<br>Alias Record]
-    
-    subgraph VPC [AWS Virtual Private Cloud - Mumbai Region]
-        direction TB
-        
-        DNS -- "Resolves to" --> ALB[Application Load Balancer<br>SSL Termination via ACM]
-        
-        subgraph SecurityBoundary [Private Compute Network]
-            direction TB
-            ALB -- "Forwards HTTP (80) to" --> TG(Target Group)
-            
-            subgraph ASG [Auto Scaling Group]
-                direction LR
-                TG -. "Auto-Registers" .-> EC2_A[EC2 Instance<br>ap-south-1a]
-                TG -. "Auto-Registers" .-> EC2_B[EC2 Instance<br>ap-south-1b]
-                TG -. "Auto-Registers" .-> EC2_C[EC2 Instance<br>ap-south-1c]
-            end
-        end
-    end
 
-    classDef default fill:#232F3E,stroke:#FF9900,stroke-width:2px,color:white;
-    classDef aws fill:#FF9900,stroke:#232F3E,stroke-width:2px,color:black;
-    class DNS,ALB,TG aws;
-```
 <!-- Cntrl+click asg_lb.png -->
 
 ![alt text](asg_lb.png)
